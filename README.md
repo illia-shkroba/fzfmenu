@@ -28,8 +28,8 @@ export TERMINAL='alacritty'
 export TERMINAL='kitty'
 ```
 
-Using `$FZF_TERMINAL` is recommended, as it allows specifying additional options to the terminal of
-choice. For example:
+It is recommended to use `$FZF_TERMINAL` instead of `$TERMINAL`, as it allows passing additional
+options to the terminal, such as setting a custom window class or other flags. For example:
 
 ```sh
 # Set a window class to 'my-fzf'.
@@ -59,4 +59,6 @@ The `fzfmenu` works by:
 
 ## Contribution
 
-Pull requests and raising of potential issues are welcome.
+Contributions are welcome! Feel free to open a [GitHub
+issue](https://github.com/illia-shkroba/fzfmenu/issues) for bug reports, feature requests, or
+discussions. Pull requests are also welcome.
