@@ -54,7 +54,8 @@ The `fzfmenu` works by:
 * Launching a new terminal running `fzf`.
 * Forwarding any provided arguments to `fzf`.
 * Redirecting standard input (*stdin*) to `fzf`.
-* Capturing the output (*stdout*) from `fzf`.
+* Capturing standard output (*stdout*) from `fzf`.
+* Capturing standard error output (*stderr*) from `fzf`.
 
 ## Contribution
 

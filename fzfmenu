@@ -13,30 +13,17 @@ fzf_dir="$(mktemp --directory --suffix '-fzf' -t)"
 trap 'rm -rf "$fzf_dir"' EXIT
 
 fzf_arguments_file="$fzf_dir/arguments"
-fzf_input_pipe="$fzf_dir/input"
-fzf_output_pipe="$fzf_dir/output"
 fzf_return_code_pipe="$fzf_dir/return-code"
 
 touch "$fzf_arguments_file"
 chmod 600 "$fzf_arguments_file"
-
-mkfifo -m 600 "$fzf_input_pipe"
-mkfifo -m 600 "$fzf_output_pipe"
-mkfifo -m 600 "$fzf_return_code_pipe"
-
 while [ "$#" -gt 0 ]; do
   echo "$1" >> "$fzf_arguments_file"
   shift
 done
 
-$FZF_TERMINAL -- sh -c "xargs --arg-file '$fzf_arguments_file' --delimiter '\n' fzf < '$fzf_input_pipe' > '$fzf_output_pipe'; echo "'$?'" > '$fzf_return_code_pipe'" &
+mkfifo -m 600 "$fzf_return_code_pipe"
 
-# If *stdin* comes from a `tty`, use `ls` -- this behavior replicates `fzf`.
-if tty -s; then
-  ls > "$fzf_input_pipe"
-else
-  cat > "$fzf_input_pipe"
-fi
+$FZF_TERMINAL -- sh -c "xargs --arg-file '$fzf_arguments_file' --delimiter '\n' fzf < '/proc/$$/fd/0' > '/proc/$$/fd/1' 2> '/proc/$$/fd/2'; echo "'$?'" > '$fzf_return_code_pipe'" &
 
-cat "$fzf_output_pipe"
 exit "$(cat "$fzf_return_code_pipe")"
